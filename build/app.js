@@ -37,8 +37,14 @@ app.get('/api/blog-stats', (req, res) => __awaiter(void 0, void 0, void 0, funct
             noDuplicates: noDuplicates
         });
     }
-    catch () { }
-    (error) => res.status(500).send({ error: error });
+    catch (error) {
+        if (axios_1.default.isAxiosError(error)) {
+            res.status(500).send({ message: error.message });
+        }
+        else {
+            res.status(500).send({ message: error });
+        }
+    }
 }));
 app.get(`/api/blog-search`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -53,10 +59,13 @@ app.get(`/api/blog-search`, (req, res) => __awaiter(void 0, void 0, void 0, func
         const searchedBlogs = lodash_1.default.filter(blogs, blog => lodash_1.default.includes(blog.title.toLowerCase(), query));
         res.status(200).send({ searchedBlogs });
     }
-    catch () { }
-    (error) => {
-        res.status(500).send({ error: error });
-    };
+    catch (error) {
+        if (axios_1.default.isAxiosError(error)) {
+            res.status(500).send({ message: error.message });
+        }
+        else {
+            res.status(500).send({ message: error });
+        }
+    }
 }));
-;
 app.listen(5000);

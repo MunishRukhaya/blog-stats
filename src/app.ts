@@ -41,7 +41,13 @@ app.get('/api/blog-stats', async (req: Request, res: Response) => {
         noDuplicates:noDuplicates
     })
 }
-catch((error:any) => res.status(500).send({error:error});
+catch (error) {
+    if (axios.isAxiosError(error)) {
+    res.status(500).send({message:error.message});
+    } else {
+        res.status(500).send({message:error});
+    }
+  }
 })
 
 app.get(`/api/blog-search`,async (req, res)=> {
@@ -70,8 +76,13 @@ try {
     const searchedBlogs = _.filter(blogs, blog=> _.includes(blog.title.toLowerCase(), query));
     res.status(200).send({searchedBlogs});
 } 
-catch((error:any)=> {
-        res.status(500).send({error:error});
-}) 
+catch (error) {
+    if (axios.isAxiosError(error)) {
+      res.status(500).send({message:error.message});
+    } else {
+      res.status(500).send({message:error});
+  }
+}
 });
+
 app.listen(5000);
